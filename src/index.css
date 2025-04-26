@@ -102,13 +102,6 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .a4-page {
-    background: #f8f9fa;
-    color: #212529;
-  }
-}
-
 /* Resume form styles */
 .resume-section {
   @apply mb-6 p-4 rounded-lg bg-background border border-border;

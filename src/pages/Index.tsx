@@ -1,8 +1,7 @@
 import { ResumeForm } from "@/components/ResumeForm";
 import { ResumePreview } from "@/components/ResumePreview";
 import { ResumeProvider } from "@/contexts/ResumeContext";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { ThemeToggle } from "@/components/ThemeToggle";
+// import { ThemeToggle } from "@/components/ThemeToggle"; // Removed
 import { ColorSchemeToggle } from "@/components/ColorSchemeToggle";
 import { useColorScheme } from "@/contexts/ColorSchemeContext";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -51,24 +50,20 @@ const Index = () => {
   );
 
   return (
-    <ThemeProvider defaultTheme="light">
-      <ResumeProvider>
-        <div className="min-h-screen flex flex-col">
-          <header className="h-16 border-b flex items-center justify-between px-4">
-            <h1 className="text-2xl font-bold flex items-center">
-              <span style={{ color: colorScheme.primary }}>Sleek</span>
-              <span>Resume</span>
-            </h1>
-            <div className="flex items-center space-x-2">
-              <ColorSchemeToggle />
-              <ThemeToggle />
-            </div>
-          </header>
-          
-          {isMobile ? <MobileLayout /> : <DesktopLayout />}
-        </div>
-      </ResumeProvider>
-    </ThemeProvider>
+    <ResumeProvider>
+      <div className="min-h-screen flex flex-col">
+        <header className="h-16 border-b flex items-center justify-between px-4">
+          <h1 className="text-2xl font-bold flex items-center">
+            <span style={{ color: colorScheme.primary }}>Sleek</span>
+            <span>Resume</span>
+          </h1>
+          <div className="flex items-center space-x-2">
+            <ColorSchemeToggle />
+          </div>
+        </header>
+        {isMobile ? <MobileLayout /> : <DesktopLayout />}
+      </div>
+    </ResumeProvider>
   );
 };
 
