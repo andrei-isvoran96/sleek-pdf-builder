@@ -4,7 +4,7 @@ import { useColorScheme } from "@/contexts/ColorSchemeContext";
 import { Button } from "@/components/ui/button";
 import { Download, Image } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import generatePDF, { Resolution, Margin } from "react-to-pdf";
+import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 
 export function ResumePreview() {
@@ -25,31 +25,58 @@ export function ResumePreview() {
     }
 
     try {
-      const options = {
-        filename: `${personalInfo.name.replace(/\s+/g, "_") || "Resume"}_Resume.pdf`,
-        resolution: Resolution.MEDIUM,
-        page: { 
-          format: "A4",
-          orientation: "portrait" as "portrait",
-          margin: Margin.MEDIUM,
-        },
-        method: "save" as "save",
-        overrides: {
-          // Ensure content is properly scaled to fit the page
-          pdf: {
-            compress: true,
-            unit: "mm" as "mm",
-          },
-          // Improve image quality and ensure content fits properly
-          canvas: {
-            useCORS: true,
-            scale: 2,
-            logging: false,
-          }
-        }
-      };
+      // Create a canvas from the resume content
+      const canvas = await html2canvas(pdfRef.current, {
+        scale: 2, // Higher scale for better quality
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff"
+      });
       
-      await generatePDF(pdfRef, options);
+      // Create PDF from canvas
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+      
+      // Calculate dimensions to fit the image properly on A4
+      const pageWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      
+      // Calculate image dimensions while maintaining aspect ratio
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      // If the image height is greater than the page height,
+      // we need to split it across multiple pages
+      if (imgHeight <= pageHeight) {
+        // Image fits on a single page - add it directly
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      } else {
+        // Image is taller than the page - split it
+        let heightLeft = imgHeight;
+        
+        // Add the first page
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        
+        // Add subsequent pages as needed
+        let page = 1;
+        while (heightLeft > 0) {
+          // Only add a new page if there's significant content left to show
+          // (avoid adding a blank or nearly blank page)
+          if (heightLeft > 5) { // 5mm threshold - don't add page for tiny remnants
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, -pageHeight * page, imgWidth, imgHeight);
+            page++;
+          }
+          heightLeft -= pageHeight;
+        }
+      }
+      
+      pdf.save(`${personalInfo.name.replace(/\s+/g, "_") || "Resume"}_Resume.pdf`);
       
       toast({
         title: "PDF Downloaded",
