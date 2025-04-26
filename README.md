@@ -30,7 +30,7 @@ A modern and intuitive resume builder application that allows users to create pr
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/sleek-pdf-builder.git
+   git clone https://github.com/andrei-isvoran96/sleek-pdf-builder.git
    cd sleek-pdf-builder
    ```
 
