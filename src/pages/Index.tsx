@@ -56,8 +56,8 @@ const Index = () => {
         <div className="min-h-screen flex flex-col">
           <header className="h-16 border-b flex items-center justify-between px-4">
             <h1 className="text-2xl font-bold flex items-center">
-              <span style={{ color: colorScheme.primary }}>Resume</span>
-              <span>Builder</span>
+              <span style={{ color: colorScheme.primary }}>Sleek</span>
+              <span>Resume</span>
             </h1>
             <div className="flex items-center space-x-2">
               <ColorSchemeToggle />
