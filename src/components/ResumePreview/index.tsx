@@ -143,9 +143,11 @@ export function ResumePreview() {
     }
   };
 
+  // Add a date validation function
+  const isValidMonth = (value: string) => /^\d{4}-(0[1-9]|1[0-2])$/.test(value);
+
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
-    
     try {
       const [year, month] = dateString.split("-");
       return `${new Date(parseInt(year), parseInt(month) - 1).toLocaleString('default', { month: 'short' })} ${year}`;
@@ -228,7 +230,7 @@ export function ResumePreview() {
                           {exp.position}
                         </h3>
                         <div className="text-sm text-gray-600">
-                          {formatDate(exp.startDate)} – {exp.isPresent ? "Present" : formatDate(exp.endDate)}
+                          {isValidMonth(exp.startDate) ? formatDate(exp.startDate) : "ERROR"} – {exp.isPresent ? "Present" : (isValidMonth(exp.endDate) ? formatDate(exp.endDate) : (exp.endDate ? "ERROR" : ""))}
                         </div>
                       </div>
                       <p className="text-sm font-medium mt-0.5" style={{ color: colorScheme.primary }}>
@@ -258,7 +260,7 @@ export function ResumePreview() {
                           {edu.institution}
                         </h3>
                         <div className="text-sm text-gray-600">
-                          {formatDate(edu.startDate)} – {edu.isPresent ? "Present" : formatDate(edu.endDate)}
+                          {isValidMonth(edu.startDate) ? formatDate(edu.startDate) : "ERROR"} – {edu.isPresent ? "Present" : (isValidMonth(edu.endDate) ? formatDate(edu.endDate) : (edu.endDate ? "ERROR" : ""))}
                         </div>
                       </div>
                       <p className="text-sm mt-0.5" style={{ color: colorScheme.primary }}>

@@ -1,4 +1,3 @@
-
 import { useResume } from "@/contexts/ResumeContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,10 +6,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle, Trash2 } from "lucide-react";
+import React, { useState } from "react";
 
 export function ExperienceSection() {
   const { resumeData, addExperience, updateExperience, removeExperience } = useResume();
   const { experiences } = resumeData;
+  const [dateErrors, setDateErrors] = useState<{[id: string]: {start: boolean, end: boolean}}>({});
+
+  const isValidMonth = (value: string) => /^\d{4}-(0[1-9]|1[0-2])$/.test(value);
 
   return (
     <div className="resume-section animate-fade-in">
@@ -61,18 +64,31 @@ export function ExperienceSection() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor={`startDate-${experience.id}`}>Start Date</Label>
+                  <Label htmlFor={`startDate-${experience.id}`}>Start Date (YYYY-MM)</Label>
                   <Input
                     id={`startDate-${experience.id}`}
                     type="month"
                     value={experience.startDate}
-                    onChange={(e) => updateExperience(experience.id, { startDate: e.target.value })}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      updateExperience(experience.id, { startDate: value });
+                      setDateErrors(prev => ({
+                        ...prev,
+                        [experience.id]: {
+                          ...prev[experience.id],
+                          start: !isValidMonth(value)
+                        }
+                      }));
+                    }}
+                    className={dateErrors[experience.id]?.start
+                      ? "input-error-glow focus:outline-none focus:ring-0"
+                      : ""}
                   />
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor={`endDate-${experience.id}`}>End Date</Label>
+                    <Label htmlFor={`endDate-${experience.id}`}>End Date (YYYY-MM)</Label>
                     <div className="flex items-center gap-2">
                       <Checkbox 
                         id={`present-${experience.id}`}
@@ -93,8 +109,21 @@ export function ExperienceSection() {
                     id={`endDate-${experience.id}`}
                     type="month"
                     value={experience.endDate}
-                    onChange={(e) => updateExperience(experience.id, { endDate: e.target.value })}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      updateExperience(experience.id, { endDate: value });
+                      setDateErrors(prev => ({
+                        ...prev,
+                        [experience.id]: {
+                          ...prev[experience.id],
+                          end: !isValidMonth(value)
+                        }
+                      }));
+                    }}
                     disabled={experience.isPresent}
+                    className={dateErrors[experience.id]?.end
+                      ? "input-error-glow focus:outline-none focus:ring-0"
+                      : ""}
                   />
                 </div>
               </div>

@@ -121,3 +121,8 @@
     width: 100%;
   }
 }
+
+.input-error-glow {
+  border-color: #ef4444 !important; /* Tailwind red-500 */
+  box-shadow: 0 0 0 2px #ef4444, 0 0 8px 2px #ef4444;
+}
