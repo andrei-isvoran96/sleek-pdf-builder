@@ -1,73 +1,83 @@
-# Welcome to your Lovable project
+# Sleek PDF Builder
 
-## Project info
+A modern and intuitive resume builder application that allows users to create professional resumes with a clean, sleek design and export them as PDF or PNG files.
 
-**URL**: https://lovable.dev/projects/bca1cc4d-4abc-458a-94be-583d95d49b8c
+## Features
 
-## How can I edit this code?
+- **Interactive Resume Editor**: Create and customize your professional resume with real-time preview
+- **PDF/PNG Export**: Download your resume in PDF or PNG format with a single click
+- **Custom Color Schemes**: Personalize your resume with custom color schemes
+- **Responsive Design**: Works on desktop and mobile devices
+- **Modern UI**: Built with shadcn/ui components and Tailwind CSS for a clean, modern look
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend**: React with TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui (Radix UI)
+- **Build Tool**: Vite
+- **PDF Export**: jsPDF and html2canvas
+- **Form Handling**: React Hook Form with Zod validation
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/bca1cc4d-4abc-458a-94be-583d95d49b8c) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js (v16 or later)
+- npm or yarn or pnpm
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/sleek-pdf-builder.git
+   cd sleek-pdf-builder
+   ```
 
-Follow these steps:
+2. Install dependencies:
+   ```sh
+   npm install
+   # or
+   yarn
+   # or
+   pnpm install
+   ```
+
+3. Start the development server:
+   ```sh
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+## Building for Production
+
+To create a production build:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+npm run build
+# or
+yarn build
+# or
+pnpm build
 ```
 
-**Edit a file directly in GitHub**
+## Application Structure
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- `/src/components` - React components including the resume editor and preview
+- `/src/contexts` - React contexts for state management (resume data, color scheme)
+- `/src/hooks` - Custom React hooks
+- `/src/pages` - Page components
+- `/src/lib` - Utility functions and shared code
 
-**Use GitHub Codespaces**
+## How to Use
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/bca1cc4d-4abc-458a-94be-583d95d49b8c) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+1. Fill in your personal information, experience, education, skills, and projects
+2. Customize the color scheme to match your style
+3. Preview your resume in real-time
+4. Download your resume as a PDF or PNG file
+5. Share your professional resume with potential employers
