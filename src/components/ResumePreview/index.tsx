@@ -1,4 +1,4 @@
-import React, { useRef, Fragment } from "react";
+import React, { useRef, Fragment, useState } from "react";
 import { useResume } from "@/contexts/ResumeContext";
 import { useColorScheme } from "@/contexts/ColorSchemeContext";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,10 @@ export function ResumePreview() {
   const { personalInfo, experiences, education, skills, projects } = resumeData;
   const pdfRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  // Font size state
+  const [fontSize, setFontSize] = useState<number>(12);
+  const fontSizes = Array.from({ length: ((32 - 8) / 2) + 1 }, (_, i) => 8 + i * 2); // [8, 10, 12, ..., 32]
 
   const handleDownloadPDF = async () => {
     if (!pdfRef.current) {
@@ -159,7 +163,21 @@ export function ResumePreview() {
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-between items-center p-4">
-        <h2 className="text-2xl font-bold">Preview</h2>
+        <div className="flex items-center gap-4">
+          <h2 className="font-bold">Preview</h2>
+          <label className="flex items-center gap-1 text-sm">
+            <span>Font size:</span>
+            <select
+              value={fontSize}
+              onChange={e => setFontSize(Number(e.target.value))}
+              className="border rounded px-2 py-1 text-sm bg-background"
+            >
+              {fontSizes.map(size => (
+                <option key={size} value={size}>{size}px</option>
+              ))}
+            </select>
+          </label>
+        </div>
         <div className="flex space-x-2">
           <Button 
             onClick={handleDownloadPNG} 
@@ -187,12 +205,12 @@ export function ResumePreview() {
             ref={pdfRef} 
             className="a4-page p-10 pb-24 shadow-lg bg-white text-black" 
             id="pdf-content"
-            style={{ minHeight: skills.length > 0 ? "calc(100% + 80px)" : "100%", backgroundColor: '#ffffff' }}
+            style={{ minHeight: skills.length > 0 ? "calc(100% + 80px)" : "100%", backgroundColor: '#ffffff', fontSize: fontSize + 'px' }}
           >
             {/* Header / Personal Info */}
             <div className="mb-6">
-              <h1 className="text-3xl font-bold text-gray-900">{personalInfo.name}</h1>
-              <p className="text-xl font-medium mt-1" style={{ color: colorScheme.primary }}>{personalInfo.title}</p>
+              <h1 style={{ fontSize: fontSize * 2.2 }} className="font-bold text-gray-900">{personalInfo.name}</h1>
+              <p style={{ fontSize: fontSize * 1.2, color: colorScheme.primary }} className="font-medium mt-1">{personalInfo.title}</p>
               
               <div className="flex flex-wrap gap-x-6 gap-y-1 mt-2 text-gray-600 text-sm">
                 {personalInfo.email && (
@@ -218,7 +236,7 @@ export function ResumePreview() {
             {/* Experience */}
             {experiences.length > 0 && (
               <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
+                <h2 style={{ fontSize: fontSize * 1.5 }} className="font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
                   Work Experience
                 </h2>
                 
@@ -226,17 +244,17 @@ export function ResumePreview() {
                   {experiences.map((exp) => (
                     <div key={exp.id} className="mb-3">
                       <div className="flex justify-between items-baseline">
-                        <h3 className="text-base font-medium text-gray-800">
+                        <h3 style={{ fontSize: fontSize * 1.2 }} className="font-medium text-gray-800">
                           {exp.position}
                         </h3>
                         <div className="text-sm text-gray-600">
                           {isValidMonth(exp.startDate) ? formatDate(exp.startDate) : "ERROR"} – {exp.isPresent ? "Present" : (isValidMonth(exp.endDate) ? formatDate(exp.endDate) : (exp.endDate ? "ERROR" : ""))}
                         </div>
                       </div>
-                      <p className="text-sm font-medium mt-0.5" style={{ color: colorScheme.primary }}>
+                      <p style={{ fontSize: fontSize * 1.2, color: colorScheme.primary }} className="font-medium mt-0.5">
                         {exp.company}
                       </p>
-                      <p className="text-sm text-gray-700 mt-1 whitespace-pre-line break-words">
+                      <p style={{ fontSize: fontSize * 1.2 }} className="text-gray-700 mt-1 whitespace-pre-line break-words">
                         {exp.description}
                       </p>
                     </div>
@@ -248,7 +266,7 @@ export function ResumePreview() {
             {/* Education */}
             {education.length > 0 && (
               <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
+                <h2 style={{ fontSize: fontSize * 1.5 }} className="font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
                   Education
                 </h2>
                 
@@ -256,14 +274,14 @@ export function ResumePreview() {
                   {education.map((edu) => (
                     <div key={edu.id} className="mb-2">
                       <div className="flex justify-between items-baseline">
-                        <h3 className="text-base font-medium text-gray-800">
+                        <h3 style={{ fontSize: fontSize * 1.2 }} className="font-medium text-gray-800">
                           {edu.institution}
                         </h3>
                         <div className="text-sm text-gray-600">
                           {isValidMonth(edu.startDate) ? formatDate(edu.startDate) : "ERROR"} – {edu.isPresent ? "Present" : (isValidMonth(edu.endDate) ? formatDate(edu.endDate) : (edu.endDate ? "ERROR" : ""))}
                         </div>
                       </div>
-                      <p className="text-sm mt-0.5" style={{ color: colorScheme.primary }}>
+                      <p style={{ fontSize: fontSize * 1.2, color: colorScheme.primary }} className="mt-0.5">
                         {edu.degree}{edu.field ? `, ${edu.field}` : ''}
                       </p>
                     </div>
@@ -275,17 +293,17 @@ export function ResumePreview() {
             {/* Projects */}
             {projects.length > 0 && (
               <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
+                <h2 style={{ fontSize: fontSize * 1.5 }} className="font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
                   Projects
                 </h2>
                 
                 <div className="space-y-4">
                   {projects.map((project) => (
                     <div key={project.id} className="mb-3">
-                      <h3 className="text-base font-medium text-gray-800">
+                      <h3 style={{ fontSize: fontSize * 1.2 }} className="font-medium text-gray-800">
                         {project.name}
                       </h3>
-                      <p className="text-sm text-gray-700 mt-1 whitespace-pre-line break-words">
+                      <p style={{ fontSize: fontSize * 1.2 }} className="text-gray-700 mt-1 whitespace-pre-line break-words">
                         {project.description}
                       </p>
                       {project.url && (
@@ -308,7 +326,7 @@ export function ResumePreview() {
             {/* Skills */}
             {skills.length > 0 && (
               <div className="skill-section" style={{ marginBottom: "70px", paddingBottom: "30px" }}>
-                <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
+                <h2 style={{ fontSize: fontSize * 1.5 }} className="font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
                   Skills
                 </h2>
                 
