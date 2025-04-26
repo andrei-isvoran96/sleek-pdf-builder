@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React, { useRef, Fragment } from "react";
 import { useResume } from "@/contexts/ResumeContext";
 import { useColorScheme } from "@/contexts/ColorSchemeContext";
 import { Button } from "@/components/ui/button";
@@ -25,15 +25,28 @@ export function ResumePreview() {
     }
 
     try {
-      // Create a canvas from the resume content
+      // Create canvas with everything visible
       const canvas = await html2canvas(pdfRef.current, {
-        scale: 2, // Higher scale for better quality
+        scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        height: pdfRef.current.scrollHeight + 100, // Add extra space for safety
+        windowHeight: pdfRef.current.scrollHeight + 100,
+        // Apply additional styling to ensure skills are visible
+        onclone: (clonedDoc) => {
+          const skillsSection = clonedDoc.querySelector('.skill-section') as HTMLElement | null;
+          if (skillsSection) {
+            // Increase spacing around skills
+            skillsSection.style.paddingBottom = '40px';
+            
+            // Ensure consistent styling in the clone
+            // No need to add additional styling for separators as they're already in the DOM
+          }
+        }
       });
       
-      // Create PDF from canvas
+      // Create PDF
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: 'portrait',
@@ -41,37 +54,35 @@ export function ResumePreview() {
         format: 'a4'
       });
       
-      // Calculate dimensions to fit the image properly on A4
+      // Calculate dimensions
       const pageWidth = 210; // A4 width in mm
       const pageHeight = 297; // A4 height in mm
-      
-      // Calculate image dimensions while maintaining aspect ratio
       const imgWidth = pageWidth;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
-      // If the image height is greater than the page height,
-      // we need to split it across multiple pages
+      // Use a more aggressive scaling to ensure everything fits
+      const scaleFactor = 0.95; // Scale down more to prevent cut-off
+      const imgHeight = (canvas.height * imgWidth) / canvas.width * scaleFactor;
+      
+      // Add the resume content to the PDF
       if (imgHeight <= pageHeight) {
-        // Image fits on a single page - add it directly
+        // Single page - adjust position to center content
         pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       } else {
-        // Image is taller than the page - split it
+        // Multi-page handling
         let heightLeft = imgHeight;
+        let position = 0;
+        let page = 0;
         
-        // Add the first page
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        // First page
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
         
-        // Add subsequent pages as needed
-        let page = 1;
+        // Additional pages if needed
         while (heightLeft > 0) {
-          // Only add a new page if there's significant content left to show
-          // (avoid adding a blank or nearly blank page)
-          if (heightLeft > 5) { // 5mm threshold - don't add page for tiny remnants
-            pdf.addPage();
-            pdf.addImage(imgData, 'PNG', 0, -pageHeight * page, imgWidth, imgHeight);
-            page++;
-          }
+          position = -pageHeight * (page + 1);
+          page++;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
           heightLeft -= pageHeight;
         }
       }
@@ -172,8 +183,9 @@ export function ResumePreview() {
         <div className="mx-auto" style={{ maxWidth: "210mm" }}>
           <div 
             ref={pdfRef} 
-            className="a4-page p-10 shadow-lg bg-white text-black"
+            className="a4-page p-10 pb-24 shadow-lg bg-white text-black" 
             id="pdf-content"
+            style={{ minHeight: skills.length > 0 ? "calc(100% + 80px)" : "100%" }}
           >
             {/* Header / Personal Info */}
             <div className="mb-6">
@@ -293,27 +305,35 @@ export function ResumePreview() {
             
             {/* Skills */}
             {skills.length > 0 && (
-              <div>
+              <div className="skill-section" style={{ marginBottom: "70px", paddingBottom: "30px" }}>
                 <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
                   Skills
                 </h2>
                 
-                <div className="flex flex-wrap gap-2">
-                  {skills.map((skill) => (
-                    <span 
-                      key={skill.id} 
-                      className="inline-block px-2 py-1 rounded text-sm"
-                      style={{ 
-                        backgroundColor: `${colorScheme.primary}10`, 
-                        color: colorScheme.primary 
-                      }}
-                    >
-                      {skill.name}
-                    </span>
+                <div className="flex flex-wrap">
+                  {skills.map((skill, index) => (
+                    <Fragment key={skill.id}>
+                      <span 
+                        className="font-bold"
+                        style={{ 
+                          color: colorScheme.primary,
+                          display: "inline-block",
+                          marginBottom: "6px"
+                        }}
+                      >
+                        {skill.name}
+                      </span>
+                      {index < skills.length - 1 && (
+                        <span className="mx-2 text-gray-400 font-normal">|</span>
+                      )}
+                    </Fragment>
                   ))}
                 </div>
               </div>
             )}
+            
+            {/* Add a large spacer div to ensure content is fully rendered */}
+            <div style={{ height: "100px" }}></div>
           </div>
         </div>
       </div>
