@@ -12,6 +12,7 @@ export interface PersonalInfo {
     label: string;
     value: string;
   }[];
+  photo?: string;
 }
 
 export interface Experience {
@@ -62,7 +63,8 @@ const defaultResumeData: ResumeData = {
     email: "email@example.com",
     phone: "(123) 456-7890",
     location: "City, Country",
-    customFields: []
+    customFields: [],
+    photo: undefined
   },
   experiences: [
     {

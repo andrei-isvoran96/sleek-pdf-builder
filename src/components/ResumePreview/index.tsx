@@ -208,28 +208,33 @@ export function ResumePreview() {
             style={{ minHeight: skills.length > 0 ? "calc(100% + 80px)" : "100%", backgroundColor: '#ffffff', fontSize: fontSize + 'px' }}
           >
             {/* Header / Personal Info */}
-            <div className="mb-6">
-              <h1 style={{ fontSize: fontSize * 2.2 }} className="font-bold text-gray-900">{personalInfo.name}</h1>
-              <p style={{ fontSize: fontSize * 1.2, color: colorScheme.primary }} className="font-medium mt-1">{personalInfo.title}</p>
-              
-              <div className="flex flex-wrap gap-x-6 gap-y-1 mt-2 text-gray-600 text-sm">
-                {personalInfo.email && (
-                  <span>{personalInfo.email}</span>
-                )}
-                {personalInfo.phone && (
-                  <span>{personalInfo.phone}</span>
-                )}
-                {personalInfo.location && (
-                  <span>{personalInfo.location}</span>
-                )}
-                {/* Display custom fields */}
-                {personalInfo.customFields?.map(field => (
-                  field.value && (
-                    <span key={field.id}>
-                      <strong>{field.label}:</strong> {field.value}
-                    </span>
-                  )
-                ))}
+            <div className="flex items-center gap-6 mb-6">
+              {personalInfo.photo && (
+                <img src={personalInfo.photo} alt="User photo" className="rounded-full object-cover border border-gray-300" style={{ width: 96, height: 96 }} />
+              )}
+              <div>
+                <h1 style={{ fontSize: fontSize * 2.2 }} className="font-bold text-gray-900">{personalInfo.name}</h1>
+                <p style={{ fontSize: fontSize * 1.2, color: colorScheme.primary }} className="font-medium mt-1">{personalInfo.title}</p>
+                
+                <div className="flex flex-wrap gap-x-6 gap-y-1 mt-2 text-gray-600 text-sm">
+                  {personalInfo.email && (
+                    <span>{personalInfo.email}</span>
+                  )}
+                  {personalInfo.phone && (
+                    <span>{personalInfo.phone}</span>
+                  )}
+                  {personalInfo.location && (
+                    <span>{personalInfo.location}</span>
+                  )}
+                  {/* Display custom fields */}
+                  {personalInfo.customFields?.map(field => (
+                    field.value && (
+                      <span key={field.id}>
+                        <strong>{field.label}:</strong> {field.value}
+                      </span>
+                    )
+                  ))}
+                </div>
               </div>
             </div>
             

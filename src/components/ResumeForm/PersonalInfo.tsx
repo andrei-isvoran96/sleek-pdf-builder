@@ -2,8 +2,9 @@ import { useResume } from "@/contexts/ResumeContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Camera } from "lucide-react";
 import { useColorScheme } from "@/contexts/ColorSchemeContext";
+import { useRef } from "react";
 
 export function PersonalInfoSection() {
   const { 
@@ -15,6 +16,27 @@ export function PersonalInfoSection() {
   } = useResume();
   const { personalInfo } = resumeData;
   const { colorScheme } = useColorScheme();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotoClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        updatePersonalInfo({ photo: ev.target?.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    updatePersonalInfo({ photo: undefined });
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   return (
     <div
@@ -24,6 +46,54 @@ export function PersonalInfoSection() {
       onMouseLeave={e => (e.currentTarget.style.borderColor = '')}
     >
       <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
+      <div className="flex items-center gap-6 mb-4">
+        <div className="relative group" style={{ width: 96, height: 96 }}>
+          {personalInfo.photo ? (
+            <>
+              <img
+                src={personalInfo.photo}
+                alt="User photo"
+                className="rounded-full object-cover border border-gray-300"
+                style={{ width: 96, height: 96 }}
+              />
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                className="absolute top-2 right-2 bg-white border border-gray-300 rounded-full p-1 shadow hover:bg-gray-100"
+                title="Remove Photo"
+                style={{ color: '#dc2626' }}
+              >
+                <X size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={handlePhotoClick}
+                className="absolute bottom-2 right-2 bg-white border border-gray-300 rounded-full p-1 shadow hover:bg-gray-100"
+                title="Upload/Replace Photo"
+              >
+                <Plus size={18} className="text-green-600" />
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={handlePhotoClick}
+              className="w-full h-full flex items-center justify-center rounded-full border border-gray-300 bg-white hover:bg-gray-100"
+              style={{ width: 96, height: 96 }}
+              title="Upload Photo"
+            >
+              <Plus size={36} className="text-gray-400" />
+            </button>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handlePhotoChange}
+            style={{ display: 'none' }}
+          />
+        </div>
+      </div>
       
       <div className="grid gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
