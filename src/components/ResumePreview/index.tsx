@@ -1,7 +1,7 @@
+
 import { useRef } from "react";
 import { useResume } from "@/contexts/ResumeContext";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import generatePDF from "react-to-pdf";
@@ -13,17 +13,34 @@ export function ResumePreview() {
   const { toast } = useToast();
 
   const handleDownloadPDF = async () => {
-    try {
-      await generatePDF(pdfRef, {
-        filename: `${personalInfo.name.replace(/\s+/g, "_")}_Resume.pdf`,
-        page: { format: "A4" }
+    if (!pdfRef.current) {
+      toast({
+        title: "Download Failed",
+        description: "Could not locate resume content. Please try again.",
+        variant: "destructive",
       });
+      return;
+    }
+
+    try {
+      const options = {
+        filename: `${personalInfo.name.replace(/\s+/g, "_") || "Resume"}_Resume.pdf`,
+        page: { 
+          format: "A4",
+          orientation: "portrait",
+          margin: 20
+        },
+        method: "save"
+      };
+      
+      await generatePDF(pdfRef, options);
       
       toast({
         title: "PDF Downloaded",
         description: "Your resume has been downloaded successfully!",
       });
     } catch (error) {
+      console.error("PDF generation error:", error);
       toast({
         title: "Download Failed",
         description: "Failed to download PDF. Please try again.",
@@ -62,6 +79,7 @@ export function ResumePreview() {
           <div 
             ref={pdfRef} 
             className="a4-page p-8 shadow-lg bg-white text-black"
+            id="pdf-content"
           >
             {/* Header / Personal Info */}
             <div className="mb-6">
