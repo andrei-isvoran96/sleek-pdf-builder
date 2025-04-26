@@ -2,9 +2,10 @@ import { useRef } from "react";
 import { useResume } from "@/contexts/ResumeContext";
 import { useColorScheme } from "@/contexts/ColorSchemeContext";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, Image } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import generatePDF from "react-to-pdf";
+import generatePDF, { Resolution, Margin } from "react-to-pdf";
+import html2canvas from "html2canvas";
 
 export function ResumePreview() {
   const { resumeData } = useResume();
@@ -26,12 +27,26 @@ export function ResumePreview() {
     try {
       const options = {
         filename: `${personalInfo.name.replace(/\s+/g, "_") || "Resume"}_Resume.pdf`,
+        resolution: Resolution.MEDIUM,
         page: { 
           format: "A4",
-          orientation: "portrait",
-          margin: 20
+          orientation: "portrait" as "portrait",
+          margin: Margin.MEDIUM,
         },
-        method: "save" as "save"
+        method: "save" as "save",
+        overrides: {
+          // Ensure content is properly scaled to fit the page
+          pdf: {
+            compress: true,
+            unit: "mm" as "mm",
+          },
+          // Improve image quality and ensure content fits properly
+          canvas: {
+            useCORS: true,
+            scale: 2,
+            logging: false,
+          }
+        }
       };
       
       await generatePDF(pdfRef, options);
@@ -45,6 +60,46 @@ export function ResumePreview() {
       toast({
         title: "Download Failed",
         description: "Failed to download PDF. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDownloadPNG = async () => {
+    if (!pdfRef.current) {
+      toast({
+        title: "Download Failed",
+        description: "Could not locate resume content. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Create a canvas from the resume content
+      const canvas = await html2canvas(pdfRef.current, {
+        scale: 2, // Higher scale for better quality
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff"
+      });
+      
+      // Convert canvas to data URL and create a download link
+      const dataUrl = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.download = `${personalInfo.name.replace(/\s+/g, "_") || "Resume"}_Resume.png`;
+      link.href = dataUrl;
+      link.click();
+      
+      toast({
+        title: "PNG Downloaded",
+        description: "Your resume image has been downloaded successfully!",
+      });
+    } catch (error) {
+      console.error("PNG generation error:", error);
+      toast({
+        title: "Download Failed",
+        description: "Failed to download PNG. Please try again.",
         variant: "destructive",
       });
     }
@@ -65,22 +120,32 @@ export function ResumePreview() {
     <div className="flex flex-col h-full">
       <div className="flex justify-between items-center p-4">
         <h2 className="text-2xl font-bold">Preview</h2>
-        <Button 
-          onClick={handleDownloadPDF} 
-          variant="default"
-          className="flex items-center gap-1"
-          style={{ backgroundColor: colorScheme.primary }}
-        >
-          <Download className="h-4 w-4" />
-          <span>Download PDF</span>
-        </Button>
+        <div className="flex space-x-2">
+          <Button 
+            onClick={handleDownloadPNG} 
+            variant="outline"
+            className="flex items-center gap-1"
+          >
+            <Image className="h-4 w-4" />
+            <span>PNG</span>
+          </Button>
+          <Button 
+            onClick={handleDownloadPDF} 
+            variant="default"
+            className="flex items-center gap-1"
+            style={{ backgroundColor: colorScheme.primary }}
+          >
+            <Download className="h-4 w-4" />
+            <span>PDF</span>
+          </Button>
+        </div>
       </div>
       
       <div className="flex-1 overflow-auto p-4">
         <div className="mx-auto" style={{ maxWidth: "210mm" }}>
           <div 
             ref={pdfRef} 
-            className="a4-page p-8 shadow-lg bg-white text-black"
+            className="a4-page p-10 shadow-lg bg-white text-black"
             id="pdf-content"
           >
             {/* Header / Personal Info */}
@@ -132,7 +197,7 @@ export function ResumePreview() {
                       <p className="text-sm font-medium mt-0.5" style={{ color: colorScheme.primary }}>
                         {exp.company}
                       </p>
-                      <p className="text-sm text-gray-700 mt-1 whitespace-pre-line">
+                      <p className="text-sm text-gray-700 mt-1 whitespace-pre-line break-words">
                         {exp.description}
                       </p>
                     </div>
