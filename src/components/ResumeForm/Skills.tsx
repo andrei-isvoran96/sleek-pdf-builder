@@ -1,16 +1,22 @@
-
 import { useResume } from "@/contexts/ResumeContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, X } from "lucide-react";
+import { useColorScheme } from "@/contexts/ColorSchemeContext";
 
 export function SkillsSection() {
   const { resumeData, addSkill, updateSkill, removeSkill } = useResume();
   const { skills } = resumeData;
+  const { colorScheme } = useColorScheme();
 
   return (
-    <div className="resume-section animate-fade-in">
+    <div
+      className="resume-section animate-fade-in group"
+      style={{ transition: 'border-color 0.2s' }}
+      onMouseEnter={e => (e.currentTarget.style.borderColor = colorScheme.primary)}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = '')}
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Skills</h2>
         <Button 
@@ -32,7 +38,11 @@ export function SkillsSection() {
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2">
             {skills.map((skill) => (
-              <Badge key={skill.id} className="flex items-center gap-1 py-2 px-3 text-sm">
+              <Badge 
+                key={skill.id} 
+                className="flex items-center gap-1 py-2 px-3 text-sm"
+                style={{ backgroundColor: colorScheme.primary, borderColor: colorScheme.primary, color: '#fff' }}
+              >
                 {skill.name}
                 <Button
                   variant="ghost"

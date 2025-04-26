@@ -5,13 +5,20 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle, Trash2, Link as LinkIcon } from "lucide-react";
+import { useColorScheme } from "@/contexts/ColorSchemeContext";
 
 export function ProjectsSection() {
   const { resumeData, addProject, updateProject, removeProject } = useResume();
   const { projects } = resumeData;
+  const { colorScheme } = useColorScheme();
 
   return (
-    <div className="resume-section animate-fade-in">
+    <div
+      className="resume-section animate-fade-in group"
+      style={{ transition: 'border-color 0.2s' }}
+      onMouseEnter={e => (e.currentTarget.style.borderColor = colorScheme.primary)}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = '')}
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Projects</h2>
         <Button 

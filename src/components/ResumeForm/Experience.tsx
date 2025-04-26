@@ -7,16 +7,22 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle, Trash2 } from "lucide-react";
 import React, { useState } from "react";
+import { useColorScheme } from "@/contexts/ColorSchemeContext";
 
 export function ExperienceSection() {
   const { resumeData, addExperience, updateExperience, removeExperience } = useResume();
   const { experiences } = resumeData;
   const [dateErrors, setDateErrors] = useState<{[id: string]: {start: boolean, end: boolean}}>({});
-
   const isValidMonth = (value: string) => /^\d{4}-(0[1-9]|1[0-2])$/.test(value);
+  const { colorScheme } = useColorScheme();
 
   return (
-    <div className="resume-section animate-fade-in">
+    <div
+      className="resume-section animate-fade-in group"
+      style={{ transition: 'border-color 0.2s' }}
+      onMouseEnter={e => (e.currentTarget.style.borderColor = colorScheme.primary)}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = '')}
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Work Experience</h2>
         <Button 

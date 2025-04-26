@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
+import { useColorScheme } from "@/contexts/ColorSchemeContext";
 
 export function PersonalInfoSection() {
   const { 
@@ -13,9 +14,15 @@ export function PersonalInfoSection() {
     removeCustomField 
   } = useResume();
   const { personalInfo } = resumeData;
+  const { colorScheme } = useColorScheme();
 
   return (
-    <div className="resume-section animate-fade-in">
+    <div
+      className="resume-section animate-fade-in group"
+      style={{ transition: 'border-color 0.2s' }}
+      onMouseEnter={e => (e.currentTarget.style.borderColor = colorScheme.primary)}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = '')}
+    >
       <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
       
       <div className="grid gap-4">
