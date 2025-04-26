@@ -10,7 +10,7 @@ import html2canvas from "html2canvas";
 export function ResumePreview() {
   const { resumeData } = useResume();
   const { colorScheme } = useColorScheme();
-  const { personalInfo, experiences, education, skills } = resumeData;
+  const { personalInfo, experiences, education, skills, projects } = resumeData;
   const pdfRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -252,6 +252,39 @@ export function ResumePreview() {
                       <p className="text-sm mt-0.5" style={{ color: colorScheme.primary }}>
                         {edu.degree}{edu.field ? `, ${edu.field}` : ''}
                       </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Projects */}
+            {projects.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
+                  Projects
+                </h2>
+                
+                <div className="space-y-4">
+                  {projects.map((project) => (
+                    <div key={project.id} className="mb-3">
+                      <h3 className="text-base font-medium text-gray-800">
+                        {project.name}
+                      </h3>
+                      <p className="text-sm text-gray-700 mt-1 whitespace-pre-line break-words">
+                        {project.description}
+                      </p>
+                      {project.url && (
+                        <a 
+                          href={project.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-sm mt-1 inline-block"
+                          style={{ color: colorScheme.primary }}
+                        >
+                          {project.url.replace(/^https?:\/\/(www\.)?/i, '')}
+                        </a>
+                      )}
                     </div>
                   ))}
                 </div>

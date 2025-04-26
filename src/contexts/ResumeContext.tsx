@@ -34,6 +34,13 @@ export interface Education {
   isPresent?: boolean;
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+}
+
 export interface Skill {
   id: string;
   name: string;
@@ -43,6 +50,7 @@ export interface ResumeData {
   personalInfo: PersonalInfo;
   experiences: Experience[];
   education: Education[];
+  projects: Project[];
   skills: Skill[];
 }
 
@@ -78,6 +86,14 @@ const defaultResumeData: ResumeData = {
       isPresent: false
     }
   ],
+  projects: [
+    {
+      id: "proj1",
+      name: "Project Name",
+      description: "A brief description of your project and your role in it.",
+      url: "https://example.com/project"
+    }
+  ],
   skills: [
     { id: "skill1", name: "Skill 1" },
     { id: "skill2", name: "Skill 2" },
@@ -98,6 +114,9 @@ interface ResumeContextProps {
   addEducation: () => void;
   updateEducation: (id: string, data: Partial<Education>) => void;
   removeEducation: (id: string) => void;
+  addProject: () => void;
+  updateProject: (id: string, data: Partial<Project>) => void;
+  removeProject: (id: string) => void;
   addSkill: () => void;
   updateSkill: (id: string, name: string) => void;
   removeSkill: (id: string) => void;
@@ -226,6 +245,36 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
+  const addProject = () => {
+    const newProject: Project = {
+      id: generateId(),
+      name: "Project Name",
+      description: "A brief description of your project and your role in it.",
+      url: "https://example.com/project"
+    };
+
+    setResumeData(prev => ({
+      ...prev,
+      projects: [...prev.projects, newProject]
+    }));
+  };
+
+  const updateProject = (id: string, data: Partial<Project>) => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: prev.projects.map(proj => 
+        proj.id === id ? { ...proj, ...data } : proj
+      )
+    }));
+  };
+
+  const removeProject = (id: string) => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: prev.projects.filter(proj => proj.id !== id)
+    }));
+  };
+
   const addSkill = () => {
     const newSkill: Skill = {
       id: generateId(),
@@ -266,6 +315,9 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     addEducation,
     updateEducation,
     removeEducation,
+    addProject,
+    updateProject,
+    removeProject,
     addSkill,
     updateSkill,
     removeSkill
