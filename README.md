@@ -37,19 +37,11 @@ A modern and intuitive resume builder application that allows users to create pr
 2. Install dependencies:
    ```sh
    npm install
-   # or
-   yarn
-   # or
-   pnpm install
    ```
 
 3. Start the development server:
    ```sh
    npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
    ```
 
 4. Open your browser and navigate to `http://localhost:5173`
@@ -60,10 +52,6 @@ To create a production build:
 
 ```sh
 npm run build
-# or
-yarn build
-# or
-pnpm build
 ```
 
 ## Application Structure
