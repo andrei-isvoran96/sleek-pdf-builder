@@ -1,11 +1,10 @@
-
 import { useRef } from "react";
 import { useResume } from "@/contexts/ResumeContext";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { generatePDF } from "react-to-pdf";
+import generatePDF from "react-to-pdf";
 
 export function ResumePreview() {
   const { resumeData } = useResume();
@@ -33,7 +32,6 @@ export function ResumePreview() {
     }
   };
 
-  // Format date string to more readable format
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
     
