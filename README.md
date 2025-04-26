@@ -21,6 +21,10 @@ A modern and intuitive resume builder application that allows users to create pr
 
 ## Getting Started
 
+You can try it out online [here](https://andrei-isvoran96.github.io/sleek-pdf-builder/)
+
+Or if you prefer locally follow the steps below.
+
 ### Prerequisites
 
 - Node.js (v16 or later)
