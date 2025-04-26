@@ -103,9 +103,9 @@ export const ColorSchemeProvider = ({ children }: { children: ReactNode }) => {
     const scheme = colorSchemes.find(s => s.id === schemeId);
     if (scheme) {
       setSelectedScheme(scheme);
-      // Save to localStorage for persistence
-      localStorage.setItem("color-scheme", schemeId);
-      localStorage.removeItem("custom-color");
+      // Remove persistence
+      // localStorage.setItem("color-scheme", schemeId);
+      // localStorage.removeItem("custom-color");
     }
   };
 
@@ -119,24 +119,11 @@ export const ColorSchemeProvider = ({ children }: { children: ReactNode }) => {
       accent: accent,
       badge: `bg-opacity-10 text-opacity-100`
     };
-    
     setSelectedScheme(customScheme);
-    // Save to localStorage for persistence
-    localStorage.setItem("custom-color", color);
-    localStorage.removeItem("color-scheme");
+    // Remove persistence
+    // localStorage.setItem("custom-color", color);
+    // localStorage.removeItem("color-scheme");
   };
-
-  // Check for saved preference
-  React.useEffect(() => {
-    const savedCustomColor = localStorage.getItem("custom-color");
-    const savedScheme = localStorage.getItem("color-scheme");
-    
-    if (savedCustomColor) {
-      setCustomColor(savedCustomColor);
-    } else if (savedScheme) {
-      setColorScheme(savedScheme);
-    }
-  }, []);
 
   const value = {
     colorScheme: selectedScheme,
