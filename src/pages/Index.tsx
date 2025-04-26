@@ -1,9 +1,10 @@
-
 import { ResumeForm } from "@/components/ResumeForm";
 import { ResumePreview } from "@/components/ResumePreview";
 import { ResumeProvider } from "@/contexts/ResumeContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { ColorSchemeToggle } from "@/components/ColorSchemeToggle";
+import { useColorScheme } from "@/contexts/ColorSchemeContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import { Edit, FileText } from "lucide-react";
 
 const Index = () => {
   const isMobile = useIsMobile();
+  const { colorScheme } = useColorScheme();
   const [activeTab, setActiveTab] = useState<string>("editor");
 
   // Desktop view with side-by-side panels
@@ -54,10 +56,13 @@ const Index = () => {
         <div className="min-h-screen flex flex-col">
           <header className="h-16 border-b flex items-center justify-between px-4">
             <h1 className="text-2xl font-bold flex items-center">
-              <span className="text-purple-500">Resume</span>
+              <span style={{ color: colorScheme.primary }}>Resume</span>
               <span>Builder</span>
             </h1>
-            <ThemeToggle />
+            <div className="flex items-center space-x-2">
+              <ColorSchemeToggle />
+              <ThemeToggle />
+            </div>
           </header>
           
           {isMobile ? <MobileLayout /> : <DesktopLayout />}

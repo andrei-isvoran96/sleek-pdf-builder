@@ -1,6 +1,6 @@
-
 import { useRef } from "react";
 import { useResume } from "@/contexts/ResumeContext";
+import { useColorScheme } from "@/contexts/ColorSchemeContext";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -8,6 +8,7 @@ import generatePDF from "react-to-pdf";
 
 export function ResumePreview() {
   const { resumeData } = useResume();
+  const { colorScheme } = useColorScheme();
   const { personalInfo, experiences, education, skills } = resumeData;
   const pdfRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
@@ -30,7 +31,7 @@ export function ResumePreview() {
           orientation: "portrait",
           margin: 20
         },
-        method: "save"
+        method: "save" as "save"
       };
       
       await generatePDF(pdfRef, options);
@@ -68,6 +69,7 @@ export function ResumePreview() {
           onClick={handleDownloadPDF} 
           variant="default"
           className="flex items-center gap-1"
+          style={{ backgroundColor: colorScheme.primary }}
         >
           <Download className="h-4 w-4" />
           <span>Download PDF</span>
@@ -84,7 +86,7 @@ export function ResumePreview() {
             {/* Header / Personal Info */}
             <div className="mb-6">
               <h1 className="text-3xl font-bold text-gray-900">{personalInfo.name}</h1>
-              <p className="text-xl text-purple-600 font-medium mt-1">{personalInfo.title}</p>
+              <p className="text-xl font-medium mt-1" style={{ color: colorScheme.primary }}>{personalInfo.title}</p>
               
               <div className="flex flex-wrap gap-x-6 gap-y-1 mt-2 text-gray-600 text-sm">
                 {personalInfo.email && (
@@ -127,7 +129,7 @@ export function ResumePreview() {
                           {formatDate(exp.startDate)} – {exp.isPresent ? "Present" : formatDate(exp.endDate)}
                         </div>
                       </div>
-                      <p className="text-sm font-medium text-purple-600 mt-0.5">
+                      <p className="text-sm font-medium mt-0.5" style={{ color: colorScheme.primary }}>
                         {exp.company}
                       </p>
                       <p className="text-sm text-gray-700 mt-1 whitespace-pre-line">
@@ -157,7 +159,7 @@ export function ResumePreview() {
                           {formatDate(edu.startDate)} – {edu.isPresent ? "Present" : formatDate(edu.endDate)}
                         </div>
                       </div>
-                      <p className="text-sm text-purple-600 mt-0.5">
+                      <p className="text-sm mt-0.5" style={{ color: colorScheme.primary }}>
                         {edu.degree}{edu.field ? `, ${edu.field}` : ''}
                       </p>
                     </div>
@@ -177,7 +179,11 @@ export function ResumePreview() {
                   {skills.map((skill) => (
                     <span 
                       key={skill.id} 
-                      className="inline-block bg-purple-50 text-purple-700 px-2 py-1 rounded text-sm"
+                      className="inline-block px-2 py-1 rounded text-sm"
+                      style={{ 
+                        backgroundColor: `${colorScheme.primary}10`, 
+                        color: colorScheme.primary 
+                      }}
                     >
                       {skill.name}
                     </span>
