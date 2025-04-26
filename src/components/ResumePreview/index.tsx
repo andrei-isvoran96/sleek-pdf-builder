@@ -185,7 +185,7 @@ export function ResumePreview() {
             ref={pdfRef} 
             className="a4-page p-10 pb-24 shadow-lg bg-white text-black" 
             id="pdf-content"
-            style={{ minHeight: skills.length > 0 ? "calc(100% + 80px)" : "100%" }}
+            style={{ minHeight: skills.length > 0 ? "calc(100% + 80px)" : "100%", backgroundColor: '#ffffff' }}
           >
             {/* Header / Personal Info */}
             <div className="mb-6">
