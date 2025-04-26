@@ -190,18 +190,16 @@ export function ResumePreview() {
                 {personalInfo.location && (
                   <span>{personalInfo.location}</span>
                 )}
+                {/* Display custom fields */}
+                {personalInfo.customFields?.map(field => (
+                  field.value && (
+                    <span key={field.id}>
+                      <strong>{field.label}:</strong> {field.value}
+                    </span>
+                  )
+                ))}
               </div>
             </div>
-            
-            {/* Summary */}
-            {personalInfo.summary && (
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-2">
-                  Professional Summary
-                </h2>
-                <p className="text-gray-700">{personalInfo.summary}</p>
-              </div>
-            )}
             
             {/* Experience */}
             {experiences.length > 0 && (

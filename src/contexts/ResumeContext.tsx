@@ -1,14 +1,17 @@
-
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 // Define resume data types
 export interface PersonalInfo {
   name: string;
   title: string;
-  email: string;
-  phone: string;
-  location: string;
-  summary: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+  customFields?: {
+    id: string;
+    label: string;
+    value: string;
+  }[];
 }
 
 export interface Experience {
@@ -51,7 +54,7 @@ const defaultResumeData: ResumeData = {
     email: "email@example.com",
     phone: "(123) 456-7890",
     location: "City, Country",
-    summary: "A brief summary of your professional background and career goals."
+    customFields: []
   },
   experiences: [
     {
@@ -86,6 +89,9 @@ const defaultResumeData: ResumeData = {
 interface ResumeContextProps {
   resumeData: ResumeData;
   updatePersonalInfo: (info: Partial<PersonalInfo>) => void;
+  addCustomField: () => void;
+  updateCustomField: (id: string, field: { label?: string; value?: string }) => void;
+  removeCustomField: (id: string) => void;
   addExperience: () => void;
   updateExperience: (id: string, data: Partial<Experience>) => void;
   removeExperience: (id: string) => void;
@@ -112,6 +118,44 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
       personalInfo: {
         ...prev.personalInfo,
         ...info
+      }
+    }));
+  };
+
+  const addCustomField = () => {
+    const newField = {
+      id: generateId(),
+      label: "Custom Field",
+      value: ""
+    };
+
+    setResumeData(prev => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        customFields: [...(prev.personalInfo.customFields || []), newField]
+      }
+    }));
+  };
+
+  const updateCustomField = (id: string, field: { label?: string; value?: string }) => {
+    setResumeData(prev => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        customFields: prev.personalInfo.customFields?.map(customField => 
+          customField.id === id ? { ...customField, ...field } : customField
+        ) || []
+      }
+    }));
+  };
+
+  const removeCustomField = (id: string) => {
+    setResumeData(prev => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        customFields: prev.personalInfo.customFields?.filter(field => field.id !== id) || []
       }
     }));
   };
@@ -213,6 +257,9 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     resumeData,
     updatePersonalInfo,
+    addCustomField,
+    updateCustomField,
+    removeCustomField,
     addExperience,
     updateExperience,
     removeExperience,
