@@ -249,7 +249,7 @@ export function ResumePreview() {
                         <h3 style={{ fontSize: fontSize * 1.2 }} className="font-medium text-gray-800">
                           {exp.position}
                         </h3>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-gray-600" style={{ fontSize: fontSize }}>
                           {isValidMonth(exp.startDate) ? formatDate(exp.startDate) : "ERROR"} – {exp.isPresent ? "Present" : (isValidMonth(exp.endDate) ? formatDate(exp.endDate) : (exp.endDate ? "ERROR" : ""))}
                         </div>
                       </div>
@@ -279,7 +279,7 @@ export function ResumePreview() {
                         <h3 style={{ fontSize: fontSize * 1.2 }} className="font-medium text-gray-800">
                           {edu.institution}
                         </h3>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-gray-600" style={{ fontSize: fontSize }}>
                           {isValidMonth(edu.startDate) ? formatDate(edu.startDate) : "ERROR"} – {edu.isPresent ? "Present" : (isValidMonth(edu.endDate) ? formatDate(edu.endDate) : (edu.endDate ? "ERROR" : ""))}
                         </div>
                       </div>
@@ -337,7 +337,7 @@ export function ResumePreview() {
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="text-sm mt-1 inline-block"
-                          style={{ color: colorScheme.primary }}
+                          style={{ color: colorScheme.primary, fontSize: fontSize }}
                         >
                           {project.url.replace(/^https?:\/\/(www\.)?/i, '')}
                         </a>
