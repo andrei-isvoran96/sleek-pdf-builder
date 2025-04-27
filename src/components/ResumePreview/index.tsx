@@ -295,13 +295,36 @@ export function ResumePreview() {
               </div>
             )}
             
+            {/* Languages */}
+            {resumeData.languages && resumeData.languages.length > 0 && (
+              <div className="mb-6">
+                <h2 style={{ fontSize: fontSize * 1.5 }} className="font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
+                  Languages
+                </h2>
+                <div className="flex flex-wrap items-center">
+                  {resumeData.languages.map((lang, index) => (
+                    <Fragment key={lang.id}>
+                      <span className="font-bold" style={{ color: colorScheme.primary, fontSize: fontSize * 1.1 }}>
+                        {lang.name}
+                        {lang.level && (
+                          <span className="ml-2 text-gray-600 font-normal">— {lang.level}</span>
+                        )}
+                      </span>
+                      {index < resumeData.languages.length - 1 && (
+                        <span className="mx-2 text-gray-400 font-normal">|</span>
+                      )}
+                    </Fragment>
+                  ))}
+                </div>
+              </div>
+            )}
+            
             {/* Projects */}
             {projects.length > 0 && (
               <div className="mb-6">
                 <h2 style={{ fontSize: fontSize * 1.5 }} className="font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
                   Projects
                 </h2>
-                
                 <div className="space-y-4">
                   {projects.map((project) => (
                     <div key={project.id} className="mb-3">
@@ -334,7 +357,6 @@ export function ResumePreview() {
                 <h2 style={{ fontSize: fontSize * 1.5 }} className="font-semibold text-gray-800 border-b border-gray-200 pb-1 mb-3">
                   Skills
                 </h2>
-                
                 <div className="flex flex-wrap">
                   {skills.map((skill, index) => (
                     <Fragment key={skill.id}>

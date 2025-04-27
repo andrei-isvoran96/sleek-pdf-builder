@@ -47,12 +47,19 @@ export interface Skill {
   name: string;
 }
 
+export interface Language {
+  id: string;
+  name: string;
+  level: string; // 'A1', 'A2', ...
+}
+
 export interface ResumeData {
   personalInfo: PersonalInfo;
   experiences: Experience[];
   education: Education[];
   projects: Project[];
   skills: Skill[];
+  languages: Language[];
 }
 
 // Default resume data
@@ -100,7 +107,10 @@ const defaultResumeData: ResumeData = {
     { id: "skill1", name: "Skill 1" },
     { id: "skill2", name: "Skill 2" },
     { id: "skill3", name: "Skill 3" }
-  ]
+  ],
+  languages: [
+    { id: 'lang1', name: 'English', level: 'Native Speaker' }
+  ],
 };
 
 // Create context
@@ -122,6 +132,9 @@ interface ResumeContextProps {
   addSkill: () => void;
   updateSkill: (id: string, name: string) => void;
   removeSkill: (id: string) => void;
+  addLanguage: () => void;
+  updateLanguage: (id: string, data: Partial<Language>) => void;
+  removeLanguage: (id: string) => void;
 }
 
 const ResumeContext = createContext<ResumeContextProps | undefined>(undefined);
@@ -305,6 +318,25 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
+  const addLanguage = () => {
+    const newLanguage = { id: generateId(), name: '', level: '' };
+    setResumeData(prev => ({ ...prev, languages: [...prev.languages, newLanguage] }));
+  };
+
+  const updateLanguage = (id: string, data: Partial<Language>) => {
+    setResumeData(prev => ({
+      ...prev,
+      languages: prev.languages.map(lang => lang.id === id ? { ...lang, ...data } : lang)
+    }));
+  };
+
+  const removeLanguage = (id: string) => {
+    setResumeData(prev => ({
+      ...prev,
+      languages: prev.languages.filter(lang => lang.id !== id)
+    }));
+  };
+
   const value = {
     resumeData,
     updatePersonalInfo,
@@ -322,7 +354,10 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     removeProject,
     addSkill,
     updateSkill,
-    removeSkill
+    removeSkill,
+    addLanguage,
+    updateLanguage,
+    removeLanguage
   };
 
   return (

@@ -1,0 +1,10 @@
+.resume-section select,
+.resume-section select:focus,
+.resume-section select:active,
+.resume-section select option,
+.resume-section select optgroup,
+.resume-section select:focus-visible {
+  background: transparent !important;
+  -webkit-appearance: none;
+  color: inherit !important;
+} 

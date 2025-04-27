@@ -3,6 +3,7 @@ import { ExperienceSection } from "./Experience";
 import { EducationSection } from "./Education";
 import { ProjectsSection } from "./Projects";
 import { SkillsSection } from "./Skills";
+import { LanguagesSection } from "./Languages";
 import { Separator } from "@/components/ui/separator";
 
 export function ResumeForm() {
@@ -13,6 +14,7 @@ export function ResumeForm() {
       <PersonalInfoSection />
       <ExperienceSection />
       <EducationSection />
+      <LanguagesSection />
       <ProjectsSection />
       <SkillsSection />
     </div>
