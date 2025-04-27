@@ -216,23 +216,20 @@ export function ResumePreview() {
                 <h1 style={{ fontSize: fontSize * 2.2 }} className="font-bold text-gray-900">{personalInfo.name}</h1>
                 <p style={{ fontSize: fontSize * 1.2, color: colorScheme.primary }} className="font-medium mt-1">{personalInfo.title}</p>
                 
-                <div className="flex flex-wrap gap-x-6 gap-y-1 mt-2 text-gray-600 text-sm">
-                  {personalInfo.email && (
-                    <span>{personalInfo.email}</span>
-                  )}
-                  {personalInfo.phone && (
-                    <span>{personalInfo.phone}</span>
-                  )}
-                  {personalInfo.location && (
-                    <span>{personalInfo.location}</span>
-                  )}
-                  {/* Display custom fields */}
-                  {personalInfo.customFields?.map(field => (
-                    field.value && (
-                      <span key={field.id}>
-                        <strong>{field.label}:</strong> {field.value}
-                      </span>
-                    )
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-gray-600 text-sm">
+                  {[personalInfo.email, personalInfo.phone, personalInfo.location]
+                    .filter(Boolean)
+                    .map((field, idx, arr) => (
+                      <Fragment key={idx}>
+                        <span>{field}</span>
+                        {idx < arr.length - 1 && <span className="mx-2 text-gray-400 font-normal">|</span>}
+                      </Fragment>
+                    ))}
+                  {personalInfo.customFields?.filter(f => f.value).map((field, idx, arr) => (
+                    <Fragment key={field.id}>
+                      <span><strong>{field.label}:</strong> {field.value}</span>
+                      {idx < (personalInfo.customFields?.filter(f => f.value).length ?? 0) - 1 && <span className="mx-2 text-gray-400 font-normal">|</span>}
+                    </Fragment>
                   ))}
                 </div>
               </div>
