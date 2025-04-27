@@ -7,7 +7,7 @@ A modern and intuitive resume builder application that allows users to create pr
 - **Interactive Resume Editor**: Create and customize your professional resume with real-time preview
 - **PDF/PNG Export**: Download your resume in PDF or PNG format with a single click
 - **Custom Color Schemes**: Personalize your resume with custom color schemes
-- **Responsive Design**: Works on desktop and mobile devices
+- **Instant feedback**: See your resume updated in real time
 - **Modern UI**: Built with shadcn/ui components and Tailwind CSS for a clean, modern look
 
 ## Tech Stack
