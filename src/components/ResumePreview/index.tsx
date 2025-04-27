@@ -339,7 +339,7 @@ export function ResumePreview() {
                           className="text-sm mt-1 inline-block"
                           style={{ color: colorScheme.primary, fontSize: fontSize }}
                         >
-                          {project.url.replace(/^https?:\/\/(www\.)?/i, '')}
+                          {project.url}
                         </a>
                       )}
                     </div>
